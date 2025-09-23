@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Relatório Completo - Revezamento Turma C</title>
+<link rel="shortcut icon" href="img/vale.png" type="image/x-icon">
+<link rel="stylesheet" href="css/style.css">
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background:#f9f9f9;
+    margin:0;
+    padding:0;
+}
+
+/* Header */
+header {
+    background:#00737a;
+    color:white;
+    padding:15px;
+}
+header h2 {
+    color: #e0f0f5;
+    margin:0;
+    font-size:1.5rem;
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+/* Container */
+.container {
+    max-width:1200px;
+    margin:20px auto;
+    padding:0 15px;
+}
+
+/* --- Container rolável da tabela --- */
+.table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch; /* rolagem suave no iOS */
+}
+
+/* Tabela */
+table {
+    width: 100%;
+    min-width: 900px; /* força scroll lateral em telas pequenas */
+    border-collapse: collapse;
+    background: white;
+}
+th, td {
+    padding:8px 12px;
+    border:1px solid #ccc;
+    text-align:left;
+    font-size:0.9rem;
+    white-space: nowrap; /* evita quebra de linha em células */
+}
+th {
+    background:#e0f0f5;
+    color:#00737a;
+}
+tr:nth-child(even){
+    background:#f7f7f7;
+}
+
+/* Responsividade geral */
+@media(max-width:1024px){
+    th, td { font-size:0.85rem; padding:6px 10px; }
+}
+@media(max-width:768px){
+    th, td { font-size:0.8rem; padding:5px 8px; }
+}
+@media(max-width:450px){
+    header h2 { font-size:1.1rem; }
+    th, td { font-size:0.7rem; padding:4px 6px; }
+}
+@media(max-width:360px){
+    th, td { font-size:0.65rem; padding:3px 5px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h2><img src="img/vale.png" alt="Logo Vale" style="height:28px;"> Relatório Completo - Turma C</h2>
+    </div>
+</header>
+
+<div class="container">
+    <div class="table-responsive">
+        <table id="tabelaRelatorio">
+            <thead>
+                <tr>
+                    <th>Nome</th>
+                    <th>Local</th>
+                    <th>Status</th>
+                    <th>Início</th>
+                    <th>Fim</th>
+                    <th>Liberação</th>
+                    <th>Retorno</th>
+                    <th>Mensagem</th>
+                    <th>Justificativa</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+async function carregarRelatorio() {
+    try {
+        const res = await fetch('/pessoas', { credentials:'include' });
+        if(!res.ok){ 
+            if(res.status===401) window.location.href='/login.html'; 
+            return; 
+        }
+        const data = await res.json();
+        const tbody = document.querySelector('#tabelaRelatorio tbody');
+        tbody.innerHTML='';
+        data.pessoas.sort((a,b)=>a.id-b.id).forEach(p=>{
+            const tr = document.createElement('tr');
+            tr.innerHTML=`
+                <td>${p.nome}</td>
+                <td>${p.local}</td>
+                <td>${p.status}</td>
+                <td>${p.hora_inicial||''}</td>
+                <td>${p.hora_final||''}</td>
+                <td>${p.liberado||''}</td>
+                <td>${p.retorno||''}</td>
+                <td>${p.mensagem||''}</td>
+                <td>${p.justificativa||''}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+    } catch(err){
+        console.error('Erro ao carregar relatório', err);
+    }
+}
+
+window.addEventListener('load', carregarRelatorio);
+</script>
+
+</body>
+</html>

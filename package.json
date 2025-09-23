@@ -1,0 +1,33 @@
+{
+  "name": "controle-de-revezamento",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "engines": {
+    "node": "22.x"
+  },
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "better-sqlite3": "^12.4.1",
+    "body-parser": "^2.2.0",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "luxon": "^3.7.2",
+    "sqlite3": "^5.1.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeffersonNayron/carga-geralc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/JeffersonNayron/carga-geralc/issues"
+  },
+  "homepage": "https://github.com/JeffersonNayron/carga-geralc#readme"
+}

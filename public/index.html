@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Controle de Equipes C</title>
+<link rel="shortcut icon" href="img/vale.png" type="image/x-icon">
+<link rel="stylesheet" href="css/style.css">
+<style>
+/* --- Perfil corporativo elegante --- */
+/* --- CSS: Perfil mais compacto e super responsivo --- */
+
+/* --- Página de Perfil - Moderna e Responsiva --- */
+#perfilPage {
+  display: none;
+  width: 100%;
+  max-width: 900px;               /* ocupa mais espaço */
+  margin: 20px auto;
+  background: linear-gradient(135deg, #ffffff 0%, #f3f8f8 100%);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.12);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  color: #123;
+}
+#perfilPage:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(0,0,0,0.15);
+}
+
+/* Título mais chamativo */
+#perfilPage h2 {
+  color: #00737a;
+  font-size: 1.4rem;
+  margin: 0 0 18px;
+  font-weight: 700;
+  text-align: center;
+  border-bottom: 2px solid #ecb11f;
+  padding-bottom: 8px;
+}
+
+/* Layout em grid elegante */
+.perfil-info {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px 20px;
+  margin-top: 12px;
+  align-items: start;
+}
+
+/* Labels */
+.perfil-info label {
+  display: block;
+  font-weight: 600;
+  color: #005f63;
+  font-size: 0.9rem;
+  margin-bottom: 6px;
+}
+
+/* Inputs e selects */
+.perfil-info input,
+.perfil-info textarea,
+.perfil-info select {
+  width: 95%;
+  border-radius: 8px;
+  padding: 8px 10px;
+  border: 1px solid #cbe7e5;
+  background: #ffffff;
+  color: #073b3b;
+  font-size: 0.9rem;
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+.perfil-info input:focus,
+.perfil-info textarea:focus,
+.perfil-info select:focus {
+  border-color: #7a3fc0;
+  box-shadow: 0 0 6px rgba(122,63,192,0.25);
+  outline: none;
+}
+.perfil-info textarea {
+  min-height: 70px;
+  resize: vertical;
+}
+
+/* Área de ações */
+#perfilActions {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+#perfilActions button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  font-weight: 600;
+  border: none;
+  transition: transform .15s ease, background .2s ease;
+}
+#perfilActions button:hover {
+  transform: translateY(-2px);
+}
+
+/* Botões */
+#btnSalvar {
+  background: #7a3fc0;
+  color: #fff;
+}
+#btnFechar {
+  background: #999;
+  color: #fff;
+}
+#btnResetPessoa {
+  background: #e53935;
+  color: #fff;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+  #perfilPage {
+    max-width: 90%;
+    padding: 15px;
+    
+  }
+  .perfil-info {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  #perfilPage h2 {
+    font-size: 1.2rem;
+  }
+  #perfilActions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  #perfilActions button {
+    width: 100%;
+  }
+}
+
+#btnSalvar { background-color:#7a3fc0; color:white; }
+#btnFechar { background-color:#999; color:white; }
+
+/* --- Botões da tabela --- */
+.btn-iniciar { background-color:#00737a !important; color:white !important; border:none; font-weight:600; padding:6px 12px; font-size:0.9rem; }
+.btn-excluir { background-color:#c0305e !important; color:white !important; border:none; font-weight:600; padding:6px 12px; font-size:0.9rem; }
+.btn-perfil { background-color:#a37fd0 !important; color:white !important; border:2px solid #d1b3ff; font-weight:600; padding:6px 12px; font-size:0.9rem; }
+
+/* --- Menu dropdown --- */.menu-wrapper {
+    position: relative;  /* necessário para o dropdown */
+    display: inline-block;
+}
+
+#menuBtn {
+    padding: 8px 14px;
+    background: #00737a;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: background 0.25s ease, transform 0.25s ease;
+}
+#menuBtn:hover { background: #005f63; transform: translateY(-2px); }
+
+.menu-escondido {
+    display: none;
+    position: absolute;
+    top: 100%;     /* logo abaixo do botão */
+    left: 0;       /* alinhado à esquerda do botão */
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    width: 180px;
+    z-index: 9999;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    padding: 4px 0;
+}
+
+.menu-escondido li { list-style: none; }
+
+.menu-escondido a {
+    display: block;
+    padding: 8px 12px;
+    color: #00737a;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.85rem;
+}
+.menu-escondido a:hover {
+    background: #e0f7fa;
+    border-radius: 6px;
+}
+
+/* --- Modal adicionar pessoa --- */
+/* --- Modal adicionar pessoa --- */
+#modalAdicionar {
+  display: none;
+  position: fixed;
+  top: 45px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+  z-index: 200;
+  backdrop-filter: blur(3px);
+}
+
+#modalAdicionar .modal-conteudo {
+  background: #ffffff;
+  margin: 8% auto;
+  padding: 20px 22px;
+  width: 90%;
+  max-width: 420px;
+  border-radius: 14px;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.2);
+  border-top: 6px solid #005f63; /* borda destaque */
+  animation: aparecerModal 0.25s ease;
+}
+
+#modalAdicionar h3 {
+  margin-top: 0;
+  color: #005f63;
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+#modalAdicionar label {
+  font-weight: 600;
+  color: #005f63;
+  margin-top: 8px;
+  display: block;
+  font-size: 0.9rem;
+}
+
+#modalAdicionar input,
+#modalAdicionar select {
+  width: 100%;
+  padding: 8px 10px;
+  margin-top: 5px;
+  margin-bottom: 12px;
+  border-radius: 8px;
+  border: 1px solid #cbe7e5;
+  font-size: 0.9rem;
+  color: #073b3b;
+  background: #ffffff;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#modalAdicionar input:focus,
+#modalAdicionar select:focus {
+  border-color: #005f63;
+  box-shadow: 0 0 6px rgba(0,95,99,0.25);
+  outline: none;
+}
+
+/* Rodapé do modal */
+#modalAdicionar .modal-footer {
+  text-align: right;
+  margin-top: 15px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+#modalAdicionar .modal-footer button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+#modalAdicionar .modal-footer button:hover {
+  transform: translateY(-2px);
+}
+
+/* Botão fechar */
+#modalAdicionar .modal-footer button:first-child {
+  background: #c0305e;
+  color: #fff;
+}
+
+/* Botão adicionar */
+#modalAdicionar .modal-footer button:last-child {
+  background: #ecb11f;
+  color: #005f63;
+}
+
+@media (max-width: 768px) {
+    #modalAdicionar {
+  display: none;
+  position: fixed;
+  top: 100px;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.55);
+  z-index: 200;
+  backdrop-filter: blur(3px);
+  padding: 5px;
+}
+    
+  }
+
+
+/* Animação suave */
+@keyframes aparecerModal {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+
+/* --- Responsividade --- */
+@media(max-width:768px){
+    .perfil-info { grid-template-columns:1fr; }
+    .btn-iniciar, .btn-excluir, .btn-perfil { width:100%; margin-bottom:5px; }
+    .table-responsive { overflow-x:auto; }
+    header .container { flex-direction:column; align-items:flex-start; gap:10px; }
+  
+}
+</style>
+</head>
+<body>
+<header id="cabecalho_geral" class="bg-light py-3 border-bottom">
+  <div class="container d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-3">
+          <div class="informacoes_header">
+            <div><small id="dataAtual" class="text-muted"></small></div>
+            <h2 class="mb-0" style="color:#00737a;">
+              <img src="img/vale.png" alt="Logo Vale" style="height:44px;"> Controle de Revezamento Turma C
+            </h2>
+            <small id="quantidadePessoas" class="text-muted">Quantidade de equipes: 0</small>
+          </div>
+      </div>
+
+      <!-- MENU AQUI, DENTRO DO CONTAINER -->
+      <div class="menu-wrapper">
+          <button id="menuBtn">Menu ▼</button>
+          <ul class="menu-escondido" id="menuList">
+              <li><a href="#" onclick="abrirAdicionarPessoa()">🧑‍🤝‍🧑 Adicionar Pessoa</a></li>
+              <li><a href="dashboard.html" onclick="fecharMenu()">⏳ Atualização</a></li>
+              <li><a href="locais.html" onclick="fecharMenu()">📍 Localização</a></li>
+              <li><a href="relatorio.html" onclick="fecharMenu()">📊 Relatório</a></li>
+              <li><a href="/logout" style="color:#ecb11f;">❌ Logout</a></li>
+              <li>
+                <li class="dropdown-item text-danger" id="resetSistemaBtn" style="color: red; padding: 10px;" onclick="fecharMenu()">♻️ Resetar Sistema</li>
+          </ul>
+      </div>
+
+  </div>
+</header>
+
+
+<div class="container my-3 table-responsive" id="mainTableContainer">
+<table class="table table-bordered align-middle" id="tabelaPessoas">
+<thead class="table-light">
+<tr>
+    <th>Sit</th>
+    <th>Nome</th>
+    <th>Local</th>
+    <th>Início</th>
+    <th>Fim</th>
+    <th>Ações</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+</div>
+
+<!-- Página de Perfil Corporativa -->
+<div id="perfilPage">
+    <h2 id="perfilNome">Perfil</h2>
+    <div class="perfil-info" id="perfilConteudo"></div>
+    <div id="perfilActions">
+        <button id="btnSalvar">💾 Salvar</button>
+        <button id="btnFechar">❌ Fechar</button>
+        <!-- Botão Resetar pessoa -->
+    <button id="btnResetPessoa" style="background-color:#e53935; color:white;">🔄 Resetar Pessoa</button>
+    </div>
+</div>
+
+<!-- Modal Adicionar Pessoa -->
+<div id="modalAdicionar">
+    <div class="modal-conteudo">
+        <h3>Adicionar Pessoa</h3>
+        <label>Nome</label>
+        <input type="text" id="inputNome">
+        <label>Local</label>
+        <select id="selectLocal">
+            <option value="">Escolher local</option>
+        </select>
+        <div class="modal-footer">
+            <button onclick="fecharModalAdicionar()">Fechar</button>
+            <button onclick="adicionarPessoa()">Adicionar</button>
+        </div>
+    </div>
+</div>
+
+
+<script>
+// Botão resetar pessoa
+document.getElementById('btnResetPessoa').addEventListener('click', async () => {
+    if (!pessoaAtual) return;
+    if(!confirm(`Deseja realmente resetar ${pessoaAtual.nome}?`)) return;
+
+    try {
+        const res = await fetch('/pessoa/reset', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ id: pessoaAtual.id }),
+            credentials: 'include'
+        });
+        const data = await res.json();
+        if (data.success) {
+            alert(`Pessoa ${pessoaAtual.nome} resetada com sucesso!`);
+            document.getElementById('perfilPage').style.display = 'none';
+            document.getElementById('mainTableContainer').style.display = 'block';
+            await carregarPessoas();
+            atualizarQuantidadePessoas();
+        } else {
+            alert('Erro ao resetar pessoa: ' + (data.error || ''));
+        }
+    } catch(e) {
+        alert('Erro ao resetar pessoa: ' + e.message);
+    }
+});
+</script>
+
+<script>
+const LOCALS = ['OFC/OEM','Pial','Carga Geral'];
+let perfil = null;
+let pessoaAtual = null;
+
+
+// Toggle do menu
+const menuBtn = document.getElementById('menuBtn');
+const menuList = document.getElementById('menuList');
+// Fecha o menu sempre que abrir modal ou navegar
+function fecharMenu() {
+    document.getElementById('menuList').style.display = 'none';
+}
+
+menuBtn.addEventListener('click', (e) => {
+    e.stopPropagation(); // impede que feche imediatamente
+    menuList.style.display = (menuList.style.display === 'block') ? 'none' : 'block';
+});
+
+// Fecha o menu ao clicar fora (apenas UMA vez)
+document.addEventListener('click', (event) => {
+    if (!menuList.contains(event.target) && !menuBtn.contains(event.target)) {
+        menuList.style.display = 'none';
+    }
+});
+
+// --- Contagem de pessoas ---               QUANTIDADE DE EQUIPES
+async function atualizarQuantidadePessoas() {
+    try {
+        const res = await fetch('/quantidade-equipes', { credentials: 'include' });
+        if(!res.ok) return;
+        const data = await res.json();
+        document.getElementById('quantidadePessoas').innerHTML =
+  `Quantidade de equipes: <span id="totalEquipes">${data.total}</span>`;
+    } catch(err) {
+        console.error('Erro ao buscar quantidade de pessoas', err);
+    }
+}
+
+// Modal Adicionar Pessoa
+function abrirAdicionarPessoa(){
+    const select = document.getElementById('selectLocal');
+    select.innerHTML = LOCALS.map(l=>`<option value="${l}">${l}</option>`).join('');
+    document.getElementById('inputNome').value='';
+    document.getElementById('modalAdicionar').style.display='block';
+    fecharMenu(); // 👈 fecha o menu ao abrir modal
+}
+function fecharModalAdicionar(){ document.getElementById('modalAdicionar').style.display='none'; }
+async function adicionarPessoa(){
+    const nome = document.getElementById('inputNome').value.trim();
+    const local = document.getElementById('selectLocal').value;
+    if(!nome){ alert('Nome obrigatório!'); return; }
+    const res = await fetch('/pessoas',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({nome, local}),
+        credentials:'include'
+    });
+    const data = await res.json();
+    if(data.success){ alert('Pessoa adicionada!'); fecharModalAdicionar(); carregarPessoas(); atualizarQuantidadePessoas(); }
+    else alert('Erro: '+(data.error||''));
+}
+
+// --- Seu JS original para tabela, perfil, iniciar/excluir ---
+function agoraBrasilia() {
+    const agora = new Date();
+    const utc = agora.getTime() + (agora.getTimezoneOffset()*60000);
+    return new Date(utc + (-3*3600000));
+}
+
+window.addEventListener('load', async () => {
+    await carregarPessoas();
+    await atualizarQuantidadePessoas();
+    setInterval(async ()=>{
+        await atualizarTudo();
+        await atualizarQuantidadePessoas();
+    }, 1000);
+    document.getElementById("dataAtual").innerText = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'long', year: 'numeric' });
+});
+
+async function carregarPessoas() {
+    const res = await fetch('/pessoas', {credentials:'include'});
+    if(!res.ok){ if(res.status===401) window.location.href='/login.html'; return; }
+    const data = await res.json();
+    perfil = data.perfil;
+    const tbody = document.querySelector('#tabelaPessoas tbody');
+    tbody.innerHTML = '';
+    montarTabela(data.pessoas);
+}
+
+function montarTabela(pessoas){
+    pessoas.sort((a,b)=> a.nome.localeCompare(b.nome, 'pt-BR', { sensitivity: 'base' }));
+
+    const tbody = document.querySelector('#tabelaPessoas tbody');
+    tbody.innerHTML='';
+    pessoas.forEach(p=>{
+        const tr = document.createElement('tr');
+        tr.innerHTML=`
+            <td style="text-align:center;">${p.status}</td>
+            <td>${p.nome}</td>
+            <td style="color: ${LOCALS.includes(p.local) ? '#c0305e' : '#000'}; font-weight:600;">
+  ${p.local}
+</td>
+
+            <td>${p.hora_inicial||''}</td>
+            <td>${p.hora_final||''}</td>
+            <td>
+                <button onclick="abrirPerfil(${p.id})" class="btn btn-sm btn-perfil">Perfil</button>
+                <button onclick="iniciarPessoa(${p.id})" class="btn btn-sm btn-iniciar">Iniciar</button>
+                <button onclick="excluirPessoa(${p.id})" class="btn btn-sm btn-excluir">Excluir</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+
+// --- Perfil ---
+async function abrirPerfil(id){
+    const res = await fetch('/pessoas', {credentials:'include'});
+    const data = await res.json();
+    const pessoa = data.pessoas.find(p=>p.id===id);
+    if(!pessoa) return;
+    pessoaAtual = pessoa;
+    document.getElementById('mainTableContainer').style.display='none';
+    document.getElementById('perfilPage').style.display='block';
+    const container = document.getElementById('perfilConteudo');
+    container.innerHTML=`
+        <label>Nome</label>
+        <input value="${pessoa.nome}" id="campo_nome">
+        <label>Local</label>
+        <select id="campo_local">${LOCALS.map(l=>`<option value="${l}" ${l===pessoa.local?'selected':''}>${l}</option>`).join('')}</select>
+        <label>Hora Início</label>
+        <input type="time" id="campo_hora_inicial" value="${pessoa.hora_inicial||''}">
+        <label>Hora Fim</label>
+        <input type="time" id="campo_hora_final" value="${pessoa.hora_final||''}" disabled>
+        <label>Hora Liberação</label>
+        <input type="time" id="campo_liberado" value="${pessoa.liberado||''}" onchange="atualizarCampo(${id},'liberado',this.value)">
+        <label>Retorno</label>
+        <input type="time" id="campo_retorno" value="${pessoa.retorno||''}" onchange="atualizarCampo(${id},'retorno',this.value)">
+        <label>Mensagem</label>
+        <textarea id="campo_mensagem">${pessoa.mensagem||''}</textarea>
+        <label>Justificativa</label>
+        <textarea id="campo_justificativa">${pessoa.justificativa||''}</textarea>
+    `;
+    document.getElementById('perfilNome').innerText = pessoa.nome;
+    document.getElementById('campo_hora_inicial').addEventListener('change', recalcularHoraFinal);
+}
+
+function recalcularHoraFinal(){
+    const hora_inicial = document.getElementById('campo_hora_inicial').value;
+    if(!hora_inicial) return;
+    const [h,m] = hora_inicial.split(':').map(Number);
+    const inicio = new Date(); inicio.setHours(h,m,0,0);
+    const fim = new Date(inicio.getTime() + 75*60*1000);
+    document.getElementById('campo_hora_final').value = `${String(fim.getHours()).padStart(2,'0')}:${String(fim.getMinutes()).padStart(2,'0')}`;
+}
+
+document.getElementById('btnSalvar').addEventListener('click', async ()=>{
+    if(!pessoaAtual) return;
+    const id = pessoaAtual.id;
+    const campos = {
+        nome: document.getElementById('campo_nome').value,
+        local: document.getElementById('campo_local').value,
+        hora_inicial: document.getElementById('campo_hora_inicial').value,
+        hora_final: document.getElementById('campo_hora_final').value,
+        liberado: document.getElementById('campo_liberado').value,
+        retorno: document.getElementById('campo_retorno').value,
+        mensagem: document.getElementById('campo_mensagem').value,
+        justificativa: document.getElementById('campo_justificativa').value
+    };
+    for(const [campo, valor] of Object.entries(campos)){
+        await fetch('/pessoa/update',{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify({id,campo,valor}),
+            credentials:'include'
+        });
+    }
+    await carregarPessoas();
+    atualizarQuantidadePessoas();
+    alert('Perfil atualizado!');
+});
+
+document.getElementById('btnFechar').addEventListener('click', ()=>{
+    document.getElementById('perfilPage').style.display='none';
+    document.getElementById('mainTableContainer').style.display='block';
+});
+
+async function iniciarPessoa(id){
+    await fetch('/pessoa/iniciar',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({id}),
+        credentials:'include'
+    });
+    await carregarPessoas();
+    atualizarQuantidadePessoas();
+}
+
+async function excluirPessoa(id){
+    if(!confirm('Deseja realmente excluir?')) return;
+    await fetch('/pessoa/excluir',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({id}),
+        credentials:'include'
+    });
+    await carregarPessoas();
+    atualizarQuantidadePessoas();
+}
+
+async function atualizarTudo(){ await carregarPessoas(); }
+
+function abrirPerfilLogado(){
+    fetch('/pessoas', {credentials:'include'}).then(r=>r.json()).then(data=>{
+        const user = data.pessoas.find(p=>p.nome.toLowerCase()===data.perfil.toLowerCase());
+        if(user) abrirPerfil(user.id);
+    });
+}
+
+function atualizarCampo(id, campo, valor){
+    fetch('/pessoa/update',{
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({id,campo,valor}),
+        credentials:'include'
+    });
+}
+</script>
+<script>
+  document.getElementById('resetSistemaBtn').addEventListener('click', async () => {
+    if(!confirm('Deseja realmente resetar todo o sistema?')) return;
+
+    try {
+        await fetch('/sistema/reset', {
+            method: 'POST',
+            credentials: 'include',
+        });
+        // Recarrega tabela após reset
+        atualizarTabela();
+    } catch(e){
+        // Erro silencioso, não mostra alert
+        console.error('Erro ao resetar sistema:', e);
+    }
+});
+
+</script>
+</body>
+</html>
