@@ -3,145 +3,248 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Relatório Completo - Revezamento Turma C</title>
-<link rel="shortcut icon" href="img/vale.png" type="image/x-icon">
-<link rel="stylesheet" href="css/style.css">
+<title>Relatório - Controle de Revezamento</title>
+<link rel="shortcut icon" href="/img/vale.png" type="image/x-icon">
 <style>
+/* -------------------
+   RESET E BASE
+------------------- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 body {
-    font-family: Arial, sans-serif;
-    background:#f9f9f9;
-    margin:0;
-    padding:0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    background-color: #f4f6f6;
+    color: #073b3b;
+    padding: 20px;
+    transition: all 0.3s ease;
+}
+h1 {
+    text-align: center;
+    font-size: 2rem;
+    color: #00737a;
+    margin-bottom: 30px;
+    font-weight: 700;
 }
 
-/* Header */
-header {
-    background:#00737a;
-    color:white;
-    padding:15px;
+/* -------------------
+   FILTRO DE DATA
+------------------- */
+.filter-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 25px;
 }
-header h2 {
-    color: #e0f0f5;
-    margin:0;
-    font-size:1.5rem;
-    display:flex;
-    align-items:center;
-    gap:10px;
+.filter-section label {
+    font-weight: 600;
+}
+.filter-section input,
+.filter-section button {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #cbe7e5;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+.filter-section input:focus {
+    outline: none;
+    border-color: #00737a;
+    box-shadow: 0 0 5px rgba(0,115,122,0.3);
+}
+.filter-section button {
+    background-color: #00737a;
+    color: #fff;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+.filter-section button:hover {
+    background-color: #005f63;
+    transform: translateY(-1px);
 }
 
-/* Container */
-.container {
-    max-width:1200px;
-    margin:20px auto;
-    padding:0 15px;
-}
-
-/* --- Container rolável da tabela --- */
-.table-responsive {
-    width: 100%;
+/* -------------------
+   TABELA DO RELATÓRIO
+------------------- */
+.table-container {
     overflow-x: auto;
-    -webkit-overflow-scrolling: touch; /* rolagem suave no iOS */
 }
-
-/* Tabela */
 table {
     width: 100%;
-    min-width: 900px; /* força scroll lateral em telas pequenas */
     border-collapse: collapse;
-    background: white;
+    background: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
 }
 th, td {
-    padding:8px 12px;
-    border:1px solid #ccc;
-    text-align:left;
-    font-size:0.9rem;
-    white-space: nowrap; /* evita quebra de linha em células */
+    padding: 12px 10px;
+    border-bottom: 1px solid #e0e0e0;
+    font-size: 0.95rem;
+    text-align: center;
+    transition: background 0.3s ease;
 }
 th {
-    background:#e0f0f5;
-    color:#00737a;
+    background-color: #00737a;
+    color: #ffffff;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
-tr:nth-child(even){
-    background:#f7f7f7;
+tr:hover td {
+    background-color: #f1f9f9;
+    cursor: default;
 }
 
-/* Responsividade geral */
-@media(max-width:1024px){
-    th, td { font-size:0.85rem; padding:6px 10px; }
+/* -------------------
+   STATUS
+------------------- */
+.status-vermelho { background:#f28b82; color:white; font-weight:600; border-radius: 6px; }
+.status-amarelo { background:#fbbc04; color:white; font-weight:600; border-radius: 6px; }
+.status-verde { background:#34a853; color:white; font-weight:600; border-radius: 6px; }
+
+/* -------------------
+   RESPONSIVIDADE
+------------------- */
+@media(max-width: 992px){
+    th, td { font-size:0.85rem; padding:8px; }
 }
 @media(max-width:768px){
-    th, td { font-size:0.8rem; padding:5px 8px; }
+    .filter-section {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .filter-section button, .filter-section input {
+        width: 100%;
+    }
 }
-@media(max-width:450px){
-    header h2 { font-size:1.1rem; }
-    th, td { font-size:0.7rem; padding:4px 6px; }
+@media(max-width:480px){
+    table {
+        font-size: 0.8rem;
+    }
 }
-@media(max-width:360px){
-    th, td { font-size:0.65rem; padding:3px 5px; }
+
+/* -------------------
+   MODO ESCURO AUTOMÁTICO
+------------------- */
+@media (prefers-color-scheme: dark) {
+    body {
+        background-color: #121212;
+        color: #e0f7f7;
+    }
+    h1 {
+        color: #00bcd4;
+    }
+    .filter-section input,
+    .filter-section button {
+        border: 1px solid #333;
+        background-color: #1e1e1e;
+        color: #e0f7f7;
+    }
+    .filter-section button:hover {
+        background-color: #00acc1;
+    }
+    table {
+        background-color: #1e1e1e;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+        border-color: #333;
+    }
+    th {
+        background-color: #006064;
+        color: #ffffff;
+    }
+    td {
+        border-color: #333;
+    }
+    tr:hover td {
+        background-color: #333;
+    }
+    .status-vermelho { background:#d32f2f; color:white; }
+    .status-amarelo { background:#f9a825; color:white; }
+    .status-verde { background:#388e3c; color:white; }
 }
 </style>
 </head>
 <body>
 
-<header>
-    <div class="container">
-        <h2><img src="img/vale.png" alt="Logo Vale" style="height:28px;"> Relatório Completo - Turma C</h2>
-    </div>
-</header>
+<h1>Relatório de Equipes</h1>
 
-<div class="container">
-    <div class="table-responsive">
-        <table id="tabelaRelatorio">
-            <thead>
-                <tr>
-                    <th>Nome</th>
-                    <th>Local</th>
-                    <th>Status</th>
-                    <th>Início</th>
-                    <th>Fim</th>
-                    <th>Liberação</th>
-                    <th>Retorno</th>
-                    <th>Mensagem</th>
-                    <th>Justificativa</th>
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
+<div class="filter-section">
+    <label for="filtroData">Filtrar por data:</label>
+    <input type="date" id="filtroData">
+    <button id="btnFiltrar">Aplicar Filtro</button>
+</div>
+
+<div class="table-container">
+    <table id="relatorioTabela">
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Local</th>
+                <th>Status</th>
+                <th>Hora Início</th>
+                <th>Hora Fim</th>
+                <th>Liberação</th>
+                <th>Retorno</th>
+                <th>Mensagem</th>
+                <th>Justificativa</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
 </div>
 
 <script>
-async function carregarRelatorio() {
-    try {
-        const res = await fetch('/pessoas', { credentials:'include' });
-        if(!res.ok){ 
-            if(res.status===401) window.location.href='/login.html'; 
-            return; 
-        }
-        const data = await res.json();
-        const tbody = document.querySelector('#tabelaRelatorio tbody');
-        tbody.innerHTML='';
-        data.pessoas.sort((a,b)=>a.id-b.id).forEach(p=>{
-            const tr = document.createElement('tr');
-            tr.innerHTML=`
-                <td>${p.nome}</td>
-                <td>${p.local}</td>
-                <td>${p.status}</td>
-                <td>${p.hora_inicial||''}</td>
-                <td>${p.hora_final||''}</td>
-                <td>${p.liberado||''}</td>
-                <td>${p.retorno||''}</td>
-                <td>${p.mensagem||''}</td>
-                <td>${p.justificativa||''}</td>
-            `;
-            tbody.appendChild(tr);
-        });
-    } catch(err){
-        console.error('Erro ao carregar relatório', err);
-    }
+// Código JS permanece igual
+async function carregarRelatorio(dataFiltro=null){
+    let url = '/pessoas-full';
+    if(dataFiltro) url = `/relatorio/${dataFiltro}`;
+    const res = await fetch(url, {credentials:'include'});
+    if(!res.ok){ if(res.status===401) window.location.href='/login.html'; return; }
+    const data = await res.json();
+    montarTabela(data.registros || data.pessoas);
 }
 
-window.addEventListener('load', carregarRelatorio);
+function montarTabela(pessoas){
+    const tbody = document.querySelector('#relatorioTabela tbody');
+    tbody.innerHTML='';
+    pessoas.forEach(p=>{
+        let statusClass='';
+        if(p.status==='🔴') statusClass='status-vermelho';
+        else if(p.status==='🟡') statusClass='status-amarelo';
+        else if(p.status==='🟢') statusClass='status-verde';
+        const tr = document.createElement('tr');
+        tr.innerHTML=`
+            <td>${p.nome}</td>
+            <td>${p.local}</td>
+            <td class="${statusClass}">${p.status}</td>
+            <td>${p.hora_inicial||''}</td>
+            <td>${p.hora_final||''}</td>
+            <td>${p.liberado||''}</td>
+            <td>${p.retorno||''}</td>
+            <td>${p.mensagem||''}</td>
+            <td>${p.justificativa||''}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+document.getElementById('btnFiltrar').addEventListener('click', ()=>{
+    const data = document.getElementById('filtroData').value;
+    carregarRelatorio(data);
+});
+
+window.addEventListener('load', async ()=>{
+    await carregarRelatorio();
+});
 </script>
 
 </body>
